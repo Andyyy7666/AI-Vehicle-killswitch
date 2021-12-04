@@ -34,18 +34,14 @@ function Notify(Text)
     AddTextComponentString(Text)
     DrawNotification(true, true)
 end
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-            RegisterCommand('+Killswitch', function()
-                local ped = PlayerPedId()
-                if DoesEntityExist(ped) and not IsEntityDead(ped) then
-                    if not IsPauseMenuActive() then 
-                        if Zone == nil then
-                            Zone = AddSpeedZoneForCoord(GetEntityCoords(PlayerPedId()), Size, Speed, false)
+RegisterCommand('+Killswitch', function()
+    local ped = PlayerPedId()
+    if DoesEntityExist(ped) and not IsEntityDead(ped) then
+        if not IsPauseMenuActive() then 
+            if Zone == nil then
+                            Zone = AddSpeedZoneForCoord(GetEntityCoords(ped), Size, Speed, false)
                             if TurnBlipOn == 1 then
-                                Area = AddBlipForRadius(GetEntityCoords(PlayerPedId()), Size)
+                                Area = AddBlipForRadius(GetEntityCoords(ped), Size)
                             end
                             SetBlipAlpha(Area, 100)
                             if KillswitchOnMsg == 1 then
@@ -60,10 +56,8 @@ Citizen.CreateThread(function()
                             if KillswitchOffMsg == 1 then
                                 Notify("Vehicle killswitch: ~g~off")
                             end
-                        end
-                    end
-                end
-            end)
+            end
+        end
     end
 end)
 
